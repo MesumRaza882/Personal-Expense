@@ -11,6 +11,7 @@ class RecordController extends Controller
     public function index()
     {
         return view('user.records.index');
+        // errors come
     }
 
     public function create(Request $request)
