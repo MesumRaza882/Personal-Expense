@@ -52,8 +52,8 @@ class CategoryEdit extends Component
 
             $this->currentImage = $path;
         }
+        $this->dispatch('showToast', 'success', 'Category updated successfully!');
 
-        session()->flash('success', 'Category updated successfully!');
     }
 
     public function render()

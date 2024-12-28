@@ -38,19 +38,10 @@ Route::middleware([RoleMiddleware::class . ':1',  'auth'])->group(function () {
 
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
-        Route::get('/favourite-books', 'favourite_books')->name('favourite');
-        Route::get('/bookDetail/{id}', 'bookDetail')->name('bookDetail');
     });
 
     Route::resource('categories', CategoryController::class);
     Route::resource('records', RecordController::class);
-});
-
-
-
-// Route for Admin (role 2)
-Route::middleware(['role:2'])->group(function () {
-    // Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
 

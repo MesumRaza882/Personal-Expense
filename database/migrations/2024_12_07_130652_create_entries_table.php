@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->decimal('amount', 10, 1);
             $table->string('status')->default('active');
+            $table->string('description')->nullable();
             $table->timestamps();
 
             $table->foreign('record_id')->references('id')->on('records')->onDelete('cascade');

@@ -46,7 +46,11 @@
                         </select>
                     </td>
                     <td>
-                        <input type="number" wire:model.live.debounce.300ms="rows.{{ $index }}.amount"
+                        <input placeholder="Enter Amount" type="number" wire:model.live.debounce.300ms="rows.{{ $index }}.amount"
+                            class="form-control">
+                    </td>
+                    <td>
+                        <input placeholder="Enter Description" type="text" wire:model="rows.{{ $index }}.description"
                             class="form-control">
                     </td>
                     <td>

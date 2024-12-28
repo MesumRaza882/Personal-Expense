@@ -8,16 +8,35 @@
     </div>
     <!-- Search Form -->
     <div class="mb-3">
-        <div class="row gx-2">
-            <div class="col-md-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
                 <input type="text" wire:model.live.debounce.250ms="searchName" placeholder="Search by name" class="form-control">
             </div>
-            <div class="col-md-3">
-                <select wire:model.live="searchType" class="form-control">
-                    <option value="">Select Type</option>
+            <div class="col-auto">
+                <select wire:model.change="searchType" class="form-control">
+                    <option value="">All(Type)</option>
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>
+            </div>
+            <div class="col-auto">
+                <select wire:model.change="selectedParentId" class="form-control">
+                    <option value="">All(Paarent-Cat)</option>
+                    @foreach ($parentCategories as $item)
+                        <option value="{{$item->id}}">{{$item->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            
+            <div class="col-auto">
+                <select wire:model.change="ParentChild" class="form-control">
+                    <option value="">All(P/C)</option>
+                    <option value="parent">Parent</option>
+                    <option value="child">Child</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button wire:click="resetFilter" class="btn btn-sm btn-secondary"><i class="fa-solid fa-rotate-left"></i></button>
             </div>
         </div>
     </div>
@@ -31,6 +50,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>ParentCategory</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -47,6 +67,14 @@
                                 </td>
 
                                 <td>{{ $category->name }}</td>
+
+                                <td> 
+                                    @if ($category->parent)
+                                    {{ $category->parent->name }}
+                                @else
+                                    <i class="fa-solid fa-circle-check"></i>
+                                @endif
+                            </td>
                                 <td>
                                     <a wire:navigate href="{{ route('categories.edit', $category->id) }}"
                                         class="btn btn-primary btn-sm">Edit</a>

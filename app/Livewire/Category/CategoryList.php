@@ -8,34 +8,40 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\Computed;
 
 class CategoryList extends Component
 {
-    #[Url] 
+    #[Url(as: 'name')]
     public $searchName;
-
-    #[Url] 
+    #[Url(as: 'type')]
     public $searchType;
+    #[Url(as: 'parent')]
+    public $selectedParentId;
+    #[Url(as: 'def')]
+    public $ParentChild;
+
     public $key;
     public $categoryCounts;
 
     use WithPagination;
-    // protected $paginationTheme = 'bootstrap';
 
-    // Reset pagination when a filter changes
-    public function updating($name, $value)
+    public function updated($name, $value)
     {
         $this->resetPage();
     }
 
-    public function placeholder()
+    public function resetFilter()
     {
-        return <<<'HTML'
-        <div>
-            <p class="text-center">loading categories ...</p>
-        </div>
-        HTML;
+        $this->reset();
     }
+
+    #[Computed]
+    public function parentCategories()
+    {
+        return Category::whereNull('parent_id')->get(['id','name']);
+    }
+ 
 
     #[On('delete-category')]
     public function deleteCategory(int $categoryId)
@@ -56,21 +62,36 @@ class CategoryList extends Component
             $this->dispatch('showToast', 'success', 'Category not found!');
         }
     }
-
-    
-
     public function render()
     {
         $query = Category::query()
             ->with('image')
             ->when($this->searchName, function ($query) {
-                $query->whereif('name', 'LIKE', $this->searchName);
+                $query->where('name', 'LIKE', "%{$this->searchName}%");
             })
             ->when($this->searchType, function ($query) {
-                $query->whereif('type', '=', $this->searchType);
+                $query->where('type', '=', $this->searchType);
+            })
+            ->when($this->ParentChild, function ($query) {
+                if ($this->ParentChild === 'parent') {
+                    $query->whereNull('parent_id');
+                } elseif ($this->ParentChild === 'child') {
+                    $query->whereNotNull('parent_id');
+                }
+            })->when($this->selectedParentId, function ($query) {
+                $query->where('parent_id', $this->selectedParentId);
             });
-        $this->categoryCounts = $query->count();
-        $categories = $query->latest()->paginate(5);
-        return view('livewire.category.category-list', ['categories' => $categories]);
+    
+        $categories = $query->latest()->paginate(10);
+    
+        // Use total() to get the total count
+        $this->categoryCounts = $categories->total();
+    
+        return view('livewire.category.category-list', [
+            'categories' => $categories,
+            'parentCategories' => $this->parentCategories,
+            'total' => $this->categoryCounts,
+        ]);
     }
+    
 }

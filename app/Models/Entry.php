@@ -9,7 +9,7 @@ class Entry extends Model
 {
     use GlobalScopesTrait;
     
-    protected $fillable = ['record_id', 'category_id', 'amount', 'status'];
+    protected $fillable = ['record_id', 'category_id', 'amount', 'status','description'];
 
     public function record()
     {

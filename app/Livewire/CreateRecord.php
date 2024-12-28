@@ -44,6 +44,7 @@ class CreateRecord extends Component
             'parent_category_id' => null,
             'subcategory_id' => null,
             'amount' => null,
+            'description' => null,
             'subcategories' => [],
         ];
     }
@@ -89,13 +90,15 @@ class CreateRecord extends Component
         foreach ($this->rows as $row) {
             Entry::create([
                 'amount' => $row['amount'],
+                'description' => $row['description'],
                 'record_id' => $record->id,
                 'category_id' => $row['subcategory_id'] ?: $row['parent_category_id'], // Use subcategory if present
             ]);
         }
 
         // Reset the form
-        $this->reset(['type', 'date', 'rows']);
+        $this->reset(['date', 'rows']);
+        $this->total = 0;
         $this->rows = [
             [
                 'parent_category_id' => null,

@@ -47,24 +47,20 @@
     </div>
     <ul class="nav flex-column p-lg-3">
         <li class="nav-item">
-            <a wire:navigate.hover
+            <a 
                 class="nav-link {{ Route::is('dashboard') || Route::is('bookDetail') ? 'active' : '' }}"
                 href="{{ route('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
         </li>
-        <li class="nav-item ">
-            <a wire:navigate.hover class="nav-link {{ Route::is('favourite') ? 'active' : '' }}"
-                href="{{ route('favourite') }}" href="{{ route('favourite') }}"><i class="fas fa-heart"></i> Favorited
-                Books</a>
-        </li>
+           
         <li class="nav-item">
-            <a wire:navigate.hover class="nav-link {{ Route::is('categories.*') ? 'active' : '' }}"
+            <a  class="nav-link {{ Route::is('categories.*') ? 'active' : '' }}"
                 href="{{ route('categories.index') }}">
                 <i class="fas fa-list"></i> Categories
             </a>
         </li>
 
         <li class="nav-item">
-            <a wire:navigate.hover class="nav-link {{ Route::is('records.index') ? 'active' : '' }}"
+            <a  class="nav-link {{ Route::is('records.index') ? 'active' : '' }}"
                 href="{{ route('records.index') }}">
                 <i class="fas fa-money-bill-alt"></i> Records
             </a>
